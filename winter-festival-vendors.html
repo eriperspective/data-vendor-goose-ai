@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Winter Festival Vendor Directory</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --emerald-dark: #064e3b;
+            --emerald-medium: #065f46;
+            --emerald-light: #059669;
+            --emerald-accent: #10b981;
+            --teal-accent: #14b8a6;
+            --grey-100: #f3f4f6;
+            --grey-200: #e5e7eb;
+            --grey-300: #d1d5db;
+            --grey-400: #9ca3af;
+            --grey-500: #6b7280;
+            --grey-600: #4b5563;
+            --grey-700: #374151;
+            --grey-800: #1f2937;
+            --grey-900: #111827;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #064e3b 50%, #0f172a 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+            color: var(--grey-100);
+        }
+
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 1em;
+            animation: fall linear infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 50px 30px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: var(--grey-100);
+            font-size: 3.5em;
+            margin-bottom: 15px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff 0%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--grey-300);
+            font-size: 1.2em;
+            font-weight: 400;
+            letter-spacing: 0.01em;
+        }
+
+        .controls {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-wrapper {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--grey-400);
+            font-size: 1.1em;
+            pointer-events: none;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 18px 20px 18px 55px;
+            font-size: 1em;
+            border: 2px solid rgba(16, 185, 129, 0.2);
+            border-radius: 12px;
+            background: rgba(31, 41, 55, 0.8);
+            color: var(--grey-100);
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .search-box::placeholder {
+            color: var(--grey-400);
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--teal-accent);
+            background: rgba(31, 41, 55, 0.95);
+            box-shadow: 0 0 0 4px rgba(20, 184, 166, 0.1);
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(31, 41, 55, 0.8);
+            color: var(--grey-300);
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(16, 185, 129, 0.2);
+            font-family: 'Inter', sans-serif;
+            text-transform: capitalize;
+        }
+
+        .filter-btn:hover {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: var(--teal-accent);
+            color: var(--teal-accent);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(20, 184, 166, 0.2);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--emerald-accent) 0%, var(--teal-accent) 100%);
+            color: white;
+            border-color: var(--emerald-accent);
+            font-weight: 600;
+        }
+
+        .vendors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .vendor-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 35px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .vendor-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .vendor-card:hover::before {
+            left: 100%;
+        }
+
+        .vendor-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(16, 185, 129, 0.3);
+            border-color: var(--teal-accent);
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        .vendor-card h3 {
+            color: var(--grey-100);
+            font-size: 1.6em;
+            margin-bottom: 20px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            transition: color 0.3s ease;
+        }
+
+        .vendor-card:hover h3 {
+            color: var(--teal-accent);
+        }
+
+        .vendor-info {
+            color: var(--grey-300);
+            line-height: 1.8;
+        }
+
+        .vendor-info p {
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 1em;
+        }
+
+        .info-icon {
+            color: var(--grey-400);
+            font-size: 1.1em;
+            width: 20px;
+            text-align: center;
+            transition: color 0.3s ease;
+        }
+
+        .vendor-card:hover .info-icon {
+            color: var(--teal-accent);
+        }
+
+        .stats {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 50px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .stats h2 {
+            margin-bottom: 35px;
+            font-size: 2.2em;
+            font-weight: 600;
+            color: var(--grey-100);
+            letter-spacing: -0.02em;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background: rgba(31, 41, 55, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 35px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: rgba(31, 41, 55, 0.8);
+            border-color: var(--teal-accent);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
+        }
+
+        .stat-icon {
+            font-size: 2.5em;
+            color: var(--teal-accent);
+            margin-bottom: 15px;
+        }
+
+        .stat-number {
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, var(--emerald-accent) 0%, var(--teal-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+            color: var(--grey-300);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.9em;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 80px 30px;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: var(--grey-300);
+            font-size: 1.3em;
+            display: none;
+        }
+
+        .no-results i {
+            font-size: 3em;
+            color: var(--grey-500);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .loading {
+            text-align: center;
+            color: var(--grey-300);
+            font-size: 1.5em;
+            padding: 60px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            color: var(--grey-400);
+            font-size: 0.95em;
+        }
+
+        footer a {
+            color: var(--teal-accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--emerald-accent);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2em;
+            }
+
+            .vendors-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-buttons {
+                flex-direction: column;
+            }
+
+            .filter-btn {
+                width: 100%;
+            }
+
+            .stats {
+                padding: 30px 20px;
+            }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body>
+    <div id="snowflakes"></div>
+
+    <div class="container">
+        <header>
+            <h1>Winter Festival Vendor Directory</h1>
+            <p class="subtitle">Discover Exceptional Food & Drinks At The Festival</p>
+        </header>
+
+        <div class="controls">
+            <div class="search-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input 
+                    type="text" 
+                    class="search-box" 
+                    id="searchBox" 
+                    placeholder="Search vendors by name, location, or cuisine..."
+                >
+            </div>
+            
+            <div class="filter-buttons" id="filterButtons">
+                <button class="filter-btn active" data-filter="all">
+                    <i class="fas fa-th"></i> All Vendors
+                </button>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">
+            <i class="fas fa-spinner fa-spin"></i> Loading vendors...
+        </div>
+        <div class="vendors-grid" id="vendorsGrid"></div>
+        <div class="no-results" id="noResults">
+            <i class="fas fa-search-minus"></i>
+            <p>No vendors found matching your search.</p>
+            <p style="font-size: 0.8em; margin-top: 10px; color: var(--grey-400);">Try a different keyword</p>
+        </div>
+
+        <div class="stats" id="stats" style="display: none;">
+            <h2>Festival Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-store"></i></div>
+                    <div class="stat-number" id="totalVendors">0</div>
+                    <div class="stat-label">Total Vendors</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-utensils"></i></div>
+                    <div class="stat-number" id="cuisineTypes">0</div>
+                    <div class="stat-label">Cuisine Types</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="stat-number" id="locations">0</div>
+                    <div class="stat-label">Locations</div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            Built By <a href="https://eriperspective.com" target="_blank">Eri Perspective</a> | Powered By <a href="https://github.com/block/goose" target="_blank">Goose</a>
+        </footer>
+    </div>
+
+    <script>
+        // Embedded vendor data (works without server/CORS issues)
+        const VENDOR_DATA = {
+            "vendors": [
+                {"name": "Joe's Hot Cocoa", "location": "Main Plaza", "cuisine": "Hot Drinks & Pastries"},
+                {"name": "Taco Truck Del Fuego", "location": "North Entrance", "cuisine": "Mexican Food"},
+                {"name": "Sweet Treats Bakery", "location": "Near the Ice Rink", "cuisine": "Cookies"},
+                {"name": "Pierogi Palace", "location": "East Side", "cuisine": "Polish Food"},
+                {"name": "Waffle Wonderland", "location": "Next to Storytelling Tent", "cuisine": "Waffles"},
+                {"name": "Mama's Meatballs", "location": "Food Court Area", "cuisine": "Italian"},
+                {"name": "The Pretzel Pretender", "location": "West Plaza", "cuisine": "Pretzels"},
+                {"name": "Curry in a Hurry", "location": "Mobile Cart - Roams Around", "cuisine": "Curry"},
+                {"name": "Sushi on Ice", "location": "Near Skating Rink", "cuisine": "Sushi"},
+                {"name": "Pizza Palace", "location": "Main Stage Area", "cuisine": "Pizza Slices"}
+            ]
+        };
+
+        let vendorsData = [];
+        let currentFilter = 'all';
+
+        function createSnowflakes() {
+            const snowflakesContainer = document.getElementById('snowflakes');
+            const snowflakeCount = 40;
+            
+            for (let i = 0; i < snowflakeCount; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.className = 'snowflake';
+                snowflake.innerHTML = '❄';
+                snowflake.style.left = Math.random() * 100 + '%';
+                snowflake.style.animationDuration = (Math.random() * 15 + 10) + 's';
+                snowflake.style.animationDelay = Math.random() * 5 + 's';
+                snowflake.style.fontSize = (Math.random() * 0.5 + 0.5) + 'em';
+                snowflake.style.opacity = Math.random() * 0.3 + 0.1;
+                snowflakesContainer.appendChild(snowflake);
+            }
+        }
+
+        function loadVendors() {
+            vendorsData = VENDOR_DATA.vendors;
+            createFilterButtons();
+            displayVendors(vendorsData);
+            updateStats();
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('stats').style.display = 'block';
+        }
+
+        function createFilterButtons() {
+            const cuisineTypes = [...new Set(vendorsData.map(v => v.cuisine))].sort();
+            const filterButtonsContainer = document.getElementById('filterButtons');
+            
+            cuisineTypes.forEach(cuisine => {
+                const button = document.createElement('button');
+                button.className = 'filter-btn';
+                button.innerHTML = `<i class="fas fa-utensils"></i> ${cuisine}`;
+                button.dataset.filter = cuisine;
+                button.addEventListener('click', () => filterVendors(cuisine, button));
+                filterButtonsContainer.appendChild(button);
+            });
+        }
+
+        function filterVendors(filter, button) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            const searchTerm = document.getElementById('searchBox').value;
+            searchVendors(searchTerm);
+        }
+
+        function displayVendors(vendors) {
+            const grid = document.getElementById('vendorsGrid');
+            const noResults = document.getElementById('noResults');
+            
+            if (vendors.length === 0) {
+                grid.innerHTML = '';
+                noResults.style.display = 'block';
+                return;
+            }
+            
+            noResults.style.display = 'none';
+            grid.innerHTML = vendors.map(vendor => `
+                <div class="vendor-card">
+                    <h3>${vendor.name}</h3>
+                    <div class="vendor-info">
+                        <p><i class="fas fa-map-marker-alt info-icon"></i><span>${vendor.location}</span></p>
+                        <p><i class="fas fa-utensils info-icon"></i><span>${vendor.cuisine}</span></p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function searchVendors(searchTerm) {
+            const term = searchTerm.toLowerCase().trim();
+            let filtered = vendorsData;
+            
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(v => v.cuisine === currentFilter);
+            }
+            
+            if (term) {
+                filtered = filtered.filter(vendor => 
+                    vendor.name.toLowerCase().includes(term) ||
+                    vendor.location.toLowerCase().includes(term) ||
+                    vendor.cuisine.toLowerCase().includes(term)
+                );
+            }
+            
+            displayVendors(filtered);
+        }
+
+        function updateStats() {
+            const cuisineTypes = new Set(vendorsData.map(v => v.cuisine));
+            const locations = new Set(vendorsData.map(v => v.location));
+            
+            document.getElementById('totalVendors').textContent = vendorsData.length;
+            document.getElementById('cuisineTypes').textContent = cuisineTypes.size;
+            document.getElementById('locations').textContent = locations.size;
+        }
+
+        document.getElementById('searchBox').addEventListener('input', (e) => searchVendors(e.target.value));
+
+        document.querySelector('[data-filter="all"]').addEventListener('click', function() {
+            currentFilter = 'all';
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            searchVendors(document.getElementById('searchBox').value);
+        });
+
+        createSnowflakes();
+        loadVendors();
+    </script>
+</body>
+</html>
